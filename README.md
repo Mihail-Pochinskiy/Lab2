@@ -321,3 +321,24 @@ public class Main {
     Output: 19665
 
 #### Задача 3
+    Input: 23495
+    Output: NO
+
+    Input: 78954
+    Output: NO
+
+    Input: 1
+    Output: YES
+
+    Input: 1111111111
+    Output: YES
+
+#### Задача 4
+    Input: 1    3
+    Output: 3
+
+    Input: 6    5 3 7 55 9 1
+    Output: 7 3 55 9 1 5 
+
+    Input: 6    3 6 2 1 9 0
+    Output: NO
