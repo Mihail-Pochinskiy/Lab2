@@ -111,9 +111,9 @@ public class Main {
     }
 
     public static int maxDivisor(int n){
-        for (int i=n/2; i>1; i--){
+        for (int i=n/2; i>1; i--){ // ищем максимальный делитель
             if (n%i==0)
-                return maxDivisor(i);
+                return maxDivisor(i); // возвращаем его максимальный делитель
         }
         return n;
     }
@@ -131,25 +131,25 @@ public class Main {
     public static int [] primes= new int[80000];
 
     public static void main(String[] args) {
-        primes();
+        primes(); // Создаем массив простых чисел до миллиона. Видимо навсегда запомню, что их ровно 78498
 
         int kNumbers=0;
-        int limit1=100;
-        int limit2=1;
+        int limit1=100; // предел простых чисел для случая p^3
+        int limit2=1; // предел простых чисел и их произведения для случая pq
         for (int i=0; i<6; i++)
             limit2*=10;
 
         for (int i=0; primes[i]<limit1; i++){
             int cube=i*i*i;
-            String s= ""+cube;
+            String s= "" + cube;
             if (cube>2000 && s.charAt(0)=='2' && s.charAt(s.length()-1)=='7')
                 kNumbers++;
         }
         for (int i=0; primes[i]!=0 && primes[i]<limit2; i++){
             int p=primes[i];
-            for (int j=0; j<i; j++){
+            for (int j=0; j<i; j++){ // перебираем простые числа меньшие q
                 int prod=p*primes[j];
-                String s= ""+prod;
+                String s= "" + prod;
                 if (prod>2000 && prod<limit2 && s.charAt(0)=='2' && s.charAt(s.length()-1)=='7')
                     kNumbers++;
             }
@@ -196,18 +196,19 @@ public class Main {
             value[i]=0;
         value[0]=n;
         boolean fl=true;
+
         for (int i=1; fl && i<1001; i++){
-            n=squareDigitsOfNumber(n);
-            if (n==1){
+            n=squareDigitsOfNumber(n);  // Задаем новое значение n
+            if (n==1){ // Если получили 1, то выходим из цикла
                 System.out.println("YES");
                 break;
             }
             else {
-                for (int j=0; fl && j<i; j++)
+                for (int j=0; fl && j<i; j++) // Проверяем получали ли мы уже данное значение
                     fl=(value[j]!=n);
             }
 
-            if (fl)
+            if (fl) // Если не получали, запоминает значение и продолжаем перебирать
                 value[i]=n;
         }
         if (!fl)
@@ -238,26 +239,26 @@ public class Main {
     public static void main(String[] args) {
         int n= in.nextInt();
         int [] mas= new int[n];
-        for (int i=0; i<n; i++)
+        for (int i=0; i<n; i++) // Считываем массив
             mas[i]= in.nextInt();
 
-        int [] ost= new int[3];
-        for (int i=0; i<n; i++)
+        int [] ost= new int[3]; // Создаем массив остатков
+        for (int i=0; i<n; i++) // Считаем количество остатков в массиве
             ost[mas[i]%3]++;
-        int max=0;
+        int max=0; // Ищем наиболее часто встречающийся остаток
         if (ost[1]>ost[max])
             max=1;
         if (ost[2]>ost[max])
             max=2;
 
-        if (ost[max]>(n+1)/2)
+        if (ost[max]>(n+1)/2) // Проверяем можем ли мы отсортировать массив
             System.out.println("NO");
         else {
-            int [] sortMas=sortMassiveMod3(mas, -1);
-            for (int i=0; i<n; i++)
+            int [] sortMas=sortMassiveMod3(mas, -1); // Последний остаток -1 позволяет найти реально самый частотный остаток
+            for (int i=0; i<n; i++) // Переписываем в массив значения отсортированного массива
                 mas[i]=sortMas[i];
 
-            for (int i=0; i<n; i++)
+            for (int i=0; i<n; i++) // Выводим отсортированный массив
                 System.out.print(mas[i] + " ");
         }
     }
@@ -265,13 +266,14 @@ public class Main {
     public static int [] sortMassiveMod3(int [] massive, int lastOst){
         int n= massive.length;
         System.out.println();
-        if (n==1)
+        if (n==1) // Массив из 1 элемента по определению отсортирован, поэтому его можно сразу вернуть
             return massive;
 
-        int [] ost= new int[3];
-        for (int i=0; i<n; i++)
+        int [] ost= new int[3]; // Создаем массив остатков по модулю 3
+        for (int i=0; i<n; i++) // Считаем количество каждого из остатков
             ost[massive[i]%3]++;
-        int max=0;
+
+        int max=0; // Ищем наиболее встречающийся остаток, не равный при этом остатку стоящего ранее элемента (этот элемент не входит в получаемый массив, поэтому его остаток надо задать отдельно)
         if (ost[1]>ost[max] && lastOst!=1)
             max=1;
         if (ost[2]>ost[max] && lastOst!=2)
@@ -283,24 +285,24 @@ public class Main {
                 max=2;
         }
 
-        int [] ans= new int[n];
-        int [] rec= new int [n-1];
-        boolean fl=false;
+        int [] ans= new int[n]; // Создаем возвращаемый массив
+        int [] rec= new int [n-1]; // Создаем массив, который отправим в рекурсию
+        boolean fl=false; // Флаг, встретили ли мы первый элемент с остатком, равным наиболее встречающемуся
         for (int i=0; i<n; i++){
             if (massive[i]%3!=max || fl){
-                if (fl)
+                if (fl) // Мы не добавляем в рекурсивный массив первый элемент с наиболее частотным остатком, поэтому надо делать шаг i-1
                     rec[i-1]=massive[i];
-                else
+                else // Если еще не встретили такой элемент, то отступ делать не надо
                     rec[i] = massive[i];
             }
-            else {
+            else { // При встрече с искомым элементом, ставим его на первое место в возвращаемом массиве
                 ans[0]=massive[i];
                 fl=true;
             }
         }
-        rec= sortMassiveMod3(rec, ans[0]%3);
+        rec= sortMassiveMod3(rec, ans[0]%3); // Делаем рекурсию
 
-        for (int i=0; i<n-1; i++)
+        for (int i=0; i<n-1; i++) // Добавляем полученный из рекурсии массив в возвращаемый
             ans[i+1]=rec[i];
 
         return ans;
