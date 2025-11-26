@@ -1,1 +1,23 @@
+import java.io.PrintStream;
+import java.util.Scanner;
 
+public class Main {
+    public static Scanner in = new Scanner(System.in);
+    public static PrintStream out = System.out;
+
+    public static void main(String[] args) {
+        int n= in.nextInt();
+
+        for (int i=0; i<n; i++){
+            System.out.print(maxDivisor(i+2) + " ");
+        }
+    }
+
+    public static int maxDivisor(int n){
+        for (int i=n/2; i>1; i--){ // ищем максимальный делитель
+            if (n%i==0)
+                return maxDivisor(i); // возвращаем его максимальный делитель
+        }
+        return n;
+    }
+}
