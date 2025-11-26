@@ -1,0 +1,79 @@
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class Main {
+    public static Scanner in = new Scanner(System.in);
+    public static PrintStream out = System.out;
+
+    public static void main(String[] args) {
+        int n= in.nextInt();
+        int [] mas= new int[n];
+        for (int i=0; i<n; i++) // Считываем массив
+            mas[i]= in.nextInt();
+
+        int [] ost= new int[3]; // Создаем массив остатков
+        for (int i=0; i<n; i++) // Считаем количество остатков в массиве
+            ost[mas[i]%3]++;
+        int max=0; // Ищем наиболее часто встречающийся остаток
+        if (ost[1]>ost[max])
+            max=1;
+        if (ost[2]>ost[max])
+            max=2;
+
+        if (ost[max]>(n+1)/2) // Проверяем можем ли мы отсортировать массив
+            System.out.println("NO");
+        else {
+            int [] sortMas=sortMassiveMod3(mas, -1); // Последний остаток -1 позволяет найти реально самый частотный остаток
+            for (int i=0; i<n; i++) // Переписываем в массив значения отсортированного массива
+                mas[i]=sortMas[i];
+
+            for (int i=0; i<n; i++) // Выводим отсортированный массив
+                System.out.print(mas[i] + " ");
+        }
+    }
+
+    public static int [] sortMassiveMod3(int [] massive, int lastOst){
+        int n= massive.length;
+        System.out.println();
+        if (n==1) // Массив из 1 элемента по определению отсортирован, поэтому его можно сразу вернуть
+            return massive;
+
+        int [] ost= new int[3]; // Создаем массив остатков по модулю 3
+        for (int i=0; i<n; i++) // Считаем количество каждого из остатков
+            ost[massive[i]%3]++;
+
+        int max=0; // Ищем наиболее встречающийся остаток, не равный при этом остатку стоящего ранее элемента (этот элемент не входит в получаемый массив, поэтому его остаток надо задать отдельно)
+        if (ost[1]>ost[max] && lastOst!=1)
+            max=1;
+        if (ost[2]>ost[max] && lastOst!=2)
+            max=2;
+        if (lastOst==max){
+            if (ost[1]>ost[2])
+                max=1;
+            else
+                max=2;
+        }
+
+        int [] ans= new int[n]; // Создаем возвращаемый массив
+        int [] rec= new int [n-1]; // Создаем массив, который отправим в рекурсию
+        boolean fl=false; // Флаг, встретили ли мы первый элемент с остатком, равным наиболее встречающемуся
+        for (int i=0; i<n; i++){
+            if (massive[i]%3!=max || fl){
+                if (fl) // Мы не добавляем в рекурсивный массив первый элемент с наиболее частотным остатком, поэтому надо делать шаг i-1
+                    rec[i-1]=massive[i];
+                else // Если еще не встретили такой элемент, то отступ делать не надо
+                    rec[i] = massive[i];
+            }
+            else { // При встрече с искомым элементом, ставим его на первое место в возвращаемом массиве
+                ans[0]=massive[i];
+                fl=true;
+            }
+        }
+        rec= sortMassiveMod3(rec, ans[0]%3); // Делаем рекурсию
+
+        for (int i=0; i<n-1; i++) // Добавляем полученный из рекурсии массив в возвращаемый
+            ans[i+1]=rec[i];
+
+        return ans;
+    }
+}
