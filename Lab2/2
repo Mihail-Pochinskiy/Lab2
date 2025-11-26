@@ -1,0 +1,56 @@
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class Main {
+    public static Scanner in = new Scanner(System.in);
+    public static PrintStream out = System.out;
+    public static int [] primes= new int[80000];
+
+    public static void main(String[] args) {
+        primes(); // Создаем массив простых чисел до миллиона. Видимо навсегда запомню, что их ровно 78498
+
+        int kNumbers=0;
+        int limit1=100; // предел простых чисел для случая p^3
+        int limit2=1; // предел простых чисел и их произведения для случая pq
+        for (int i=0; i<6; i++)
+            limit2*=10;
+
+        for (int i=0; primes[i]<limit1; i++){
+            int cube=i*i*i;
+            String s= "" + cube;
+            if (cube>2000 && s.charAt(0)=='2' && s.charAt(s.length()-1)=='7')
+                kNumbers++;
+        }
+        for (int i=0; primes[i]!=0 && primes[i]<limit2; i++){
+            int p=primes[i];
+            for (int j=0; j<i; j++){ // перебираем простые числа меньшие q
+                int prod=p*primes[j];
+                String s= "" + prod;
+                if (prod>2000 && prod<limit2 && s.charAt(0)=='2' && s.charAt(s.length()-1)=='7')
+                    kNumbers++;
+            }
+        }
+
+        System.out.println(kNumbers);
+    }
+
+    public static void primes(){
+        int limit=1;
+        for (int i=0; i<6; i++)
+            limit*=10;
+        for (int i=0; i<80000; i++)
+            primes[i]=0;
+
+        int kPrimes=1;
+        primes[0]=2;
+        for (int i=3; i<=limit; i+=2){
+            boolean fl=false;
+            for (int j=0; !fl && j<kPrimes; j++)
+                fl=(i%primes[j]==0);
+            if (!fl){
+                primes[kPrimes]=i;
+                kPrimes++;
+            }
+        }
+    }
+}
