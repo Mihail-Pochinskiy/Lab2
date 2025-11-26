@@ -1,0 +1,43 @@
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class Main {
+    public static Scanner in = new Scanner(System.in);
+    public static PrintStream out = System.out;
+
+    public static void main(String[] args) {
+        int n= in.nextInt();
+        int [] value = new int[1001];
+        for (int i=0; i<1001; i++)
+            value[i]=0;
+        value[0]=n;
+        boolean fl=true;
+
+        for (int i=1; fl && i<1001; i++){
+            n=squareDigitsOfNumber(n);  // Задаем новое значение n
+            if (n==1){ // Если получили 1, то выходим из цикла
+                System.out.println("YES");
+                break;
+            }
+            else {
+                for (int j=0; fl && j<i; j++) // Проверяем получали ли мы уже данное значение
+                    fl=(value[j]!=n);
+            }
+
+            if (fl) // Если не получали, запоминает значение и продолжаем перебирать
+                value[i]=n;
+        }
+        if (!fl)
+            System.out.println("NO");
+    }
+
+    public static int squareDigitsOfNumber(int n){
+        int ans=0;
+        while (n>0){
+            int ost=n%10;
+            ans+=(ost*ost);
+            n/=10;
+        }
+        return ans;
+    }
+}
