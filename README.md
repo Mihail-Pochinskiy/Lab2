@@ -142,12 +142,12 @@ public class Main {
         for (int i=0; primes[i]<limit1; i++){
             int cube=i*i*i;
             String s= "" + cube;
-            if (cube>2000 && s.charAt(0)=='2' && s.charAt(s.length()-1)=='7')
+            if (cube>2000 && s.charAt(0)=='2' && s.charAt(s.length()-2)=='7')
                 kNumbers++;
         }
         for (int i=0; primes[i]!=0 && primes[i]<limit2; i++){
             int p=primes[i];
-            for (int j=0; j<i; j++){ // перебираем простые числа меньшие q
+            for (int j=0; primes[j]<=limit2/primes[i]; j++){ // перебираем простые числа меньшие q
                 int prod=p*primes[j];
                 String s= "" + prod;
                 if (prod>2000 && prod<limit2 && s.charAt(0)=='2' && s.charAt(s.length()-1)=='7')
@@ -320,7 +320,7 @@ public class Main {
 
 #### Задача 2
     Input: -
-    Output: 19665
+    Output: 8462
 
 #### Задача 3
     Input: 23495
